@@ -7,7 +7,6 @@ import {Task} from "./entities/task.entity";
 import {User} from "../users/entities/user.entity";
 import {QueryDeepPartialEntity} from "typeorm/query-builder/QueryPartialEntity";
 import {RequestPaginationFilter} from "../pagination/RequestPaginationFilter";
-import {UsersFilter} from "../users/users.controller";
 import {PageService} from "../pagination/PageService";
 import {TasksFilter} from "./tasks.controller";
 
@@ -17,7 +16,7 @@ export class TasksService extends PageService {
     @InjectRepository(Task) private readonly taskRepo: Repository<Task>,
     @InjectRepository(User) private readonly userRepo: Repository<User>,
   ) {
-    super()
+    super();
   }
 
   async create(createTaskDto: CreateTaskDto) {
@@ -34,7 +33,6 @@ export class TasksService extends PageService {
   }
 
   async findAll(filter: RequestPaginationFilter & TasksFilter) {
-    return await this.taskRepo.find()
     const { ...params } = filter;
 
     return await this.paginate(

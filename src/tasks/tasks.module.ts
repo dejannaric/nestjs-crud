@@ -5,11 +5,10 @@ import {IsValidUser} from "./validators/user.exists.validator";
 import {Task} from "./entities/task.entity";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {User} from "../users/entities/user.entity";
-import {RequestPaginationFilter} from "../pagination/RequestPaginationFilter";
 
 @Module({
   imports: [TypeOrmModule.forFeature([Task, User])],
   controllers: [TasksController],
-  providers: [TasksService, IsValidUser, RequestPaginationFilter],
+  providers: [TasksService, IsValidUser],
 })
 export class TasksModule {}

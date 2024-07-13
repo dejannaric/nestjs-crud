@@ -6,13 +6,19 @@ import {Repository} from "typeorm";
 import {Task} from "./entities/task.entity";
 import {User} from "../users/entities/user.entity";
 import {QueryDeepPartialEntity} from "typeorm/query-builder/QueryPartialEntity";
+import {RequestPaginationFilter} from "../pagination/RequestPaginationFilter";
+import {UsersFilter} from "../users/users.controller";
+import {PageService} from "../pagination/PageService";
+import {TasksFilter} from "./tasks.controller";
 
 @Injectable()
-export class TasksService {
+export class TasksService extends PageService {
   constructor(
     @InjectRepository(Task) private readonly taskRepo: Repository<Task>,
     @InjectRepository(User) private readonly userRepo: Repository<User>,
-  ) {}
+  ) {
+    super()
+  }
 
   async create(createTaskDto: CreateTaskDto) {
     const user = await this.userRepo.findOneBy({
@@ -27,8 +33,15 @@ export class TasksService {
 
   }
 
-  async findAll() {
+  async findAll(filter: RequestPaginationFilter & TasksFilter) {
     return await this.taskRepo.find()
+    const { ...params } = filter;
+
+    return await this.paginate(
+      this.taskRepo,
+      filter,
+      this.createWhereQuery(params),
+    );
   }
 
   async findOne(id: number) {
@@ -52,5 +65,20 @@ export class TasksService {
 
   async remove(id: number) {
     return await this.taskRepo.delete(id);
+  }
+
+  private createWhereQuery(params: TasksFilter) {
+    const where: any = {};
+
+    if (params.status) {
+      where.status = params.status;
+    }
+    if (params.title) {
+      where.title = params.title;
+    }
+    if (params.description) {
+      where.description = params.description;
+    }
+    return where;
   }
 }

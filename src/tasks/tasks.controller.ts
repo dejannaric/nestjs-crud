@@ -1,8 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {Controller, Get, Post, Body, Patch, Param, Delete, Query, UsePipes, ValidationPipe} from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import {StatusType} from "./entities/task.entity";
+import {RequestPaginationFilter} from "../pagination/RequestPaginationFilter";
 
+export interface TasksFilter {
+  title: string;
+  description: string;
+  status: StatusType;
+}
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
@@ -13,8 +20,9 @@ export class TasksController {
   }
 
   @Get()
-  async findAll() {
-    return await this.tasksService.findAll();
+  @UsePipes(new ValidationPipe({transform: true}))
+  async findAll(@Query() filter: RequestPaginationFilter & TasksFilter) {
+    return await this.tasksService.findAll(filter);
   }
 
   @Get(':id')

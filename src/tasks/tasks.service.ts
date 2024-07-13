@@ -44,7 +44,7 @@ export class TasksService {
       ...(updateTaskDto.title && { title: updateTaskDto.title }),
       ...(updateTaskDto.user && { user: {id: updateTaskDto.user} }),
     }
-    return await this.taskRepo.update(id, partialEntity);
+    return await this.taskRepo.update({id: id}, partialEntity);
   }
 
   async remove(id: number) {

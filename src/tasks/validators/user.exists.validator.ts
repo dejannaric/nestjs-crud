@@ -2,17 +2,19 @@ import { Injectable } from '@nestjs/common'
 import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator'
 import {Repository} from 'typeorm'
 import {InjectRepository} from "@nestjs/typeorm";
-import {Task} from "../entities/task.entity";
+import {User} from "../../users/entities/user.entity";
 
 @ValidatorConstraint({ name: 'userExists', async: true })
 @Injectable()
 export class IsValidUser implements ValidatorConstraintInterface {
   constructor(
-    @InjectRepository(Task) private readonly taskRepo: Repository<Task>
+    @InjectRepository(User) private readonly userRepo: Repository<User>
   ) {}
   async validate(user: number): Promise<boolean> {
-
-    const userExist = await this.taskRepo.exists({
+    if(!user) {
+      return false
+    }
+    const userExist = await this.userRepo.exists({
       where: {
         id: user
       }

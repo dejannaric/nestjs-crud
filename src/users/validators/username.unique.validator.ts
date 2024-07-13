@@ -11,7 +11,9 @@ export class IsUsernameUnique implements ValidatorConstraintInterface {
     @InjectRepository(User) private readonly userRepo: Repository<User>
   ) {}
   async validate(suggestedUsername: string): Promise<boolean> {
-
+    if(!suggestedUsername) {
+      return false
+    }
     const usernameExist = await this.userRepo.exists({
       where: {
         username: suggestedUsername
@@ -22,6 +24,6 @@ export class IsUsernameUnique implements ValidatorConstraintInterface {
 
   defaultMessage(validationArguments: ValidationArguments): string {
     const field = validationArguments.property
-    return `${field} already exists!`
+    return `${field} missing or already exists!`
   }
 }

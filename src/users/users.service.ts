@@ -22,8 +22,11 @@ export class UsersService {
   }
 
   async findOne(id: number) {
-    return await this.userRepo.findOneBy({
-      id: id
+    return await this.userRepo.findOne({
+      where: {
+        id: id
+      },
+      relations: ['tasks']
     })
   }
 

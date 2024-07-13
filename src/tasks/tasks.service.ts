@@ -32,8 +32,11 @@ export class TasksService {
   }
 
   async findOne(id: number) {
-    return await this.taskRepo.findOneBy({
-      id: id
+    return await this.taskRepo.findOne({
+      where: {
+        id: id
+      },
+      relations: ['user']
     })
   }
 

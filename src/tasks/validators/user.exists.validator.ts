@@ -11,15 +11,10 @@ export class IsValidUser implements ValidatorConstraintInterface {
     @InjectRepository(User) private readonly userRepo: Repository<User>
   ) {}
   async validate(user: number): Promise<boolean> {
-    if(!user) {
-      return false
-    }
-    const userExist = await this.userRepo.exists({
-      where: {
+    const userExist = await this.userRepo.existsBy({
         id: user
-      }
     })
-    return !userExist
+    return userExist
   }
 
   defaultMessage(validationArguments: ValidationArguments): string {

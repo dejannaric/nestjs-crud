@@ -19,10 +19,6 @@ export class PageService {
     filter: RequestPaginationFilter,
     where: FindOptionsWhere<T>,
   ) {
-    console.log(`page: ${filter.page}`)
-    console.log(`pageSize: ${filter.pageSize}`)
-    console.log(`order: ${this.createOrderQuery(filter)}`)
-    console.log(`skip calculation: ${(filter.page - 1) * (filter.pageSize + 1)}`)
     const [objects, total] = await repository.findAndCount({
       order: this.createOrderQuery(filter),
       skip: ((filter.page != undefined ? filter.page : 1) - 1) * (filter.pageSize != undefined ? filter.pageSize : 3),

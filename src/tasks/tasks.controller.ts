@@ -20,7 +20,6 @@ export class TasksController {
   }
 
   @Get()
-  @UsePipes(new ValidationPipe({transform: true}))
   async findAll(@Query() filter: RequestPaginationFilter & TasksFilter) {
     return await this.tasksService.findAll(filter);
   }

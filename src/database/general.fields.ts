@@ -1,12 +1,12 @@
-import {  CreateDateColumn, PrimaryColumn, UpdateDateColumn } from 'typeorm';
+import {CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
 
 export abstract class GeneralFields {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @CreateDateColumn({name: 'created_timestamp'})
   createdTimestamp: Date;
 
-  @UpdateDateColumn({ nullable: true, name: 'updated_timestamp' })
+  @UpdateDateColumn({name: 'updated_timestamp' })
   updatedTimestamp: Date;
 }

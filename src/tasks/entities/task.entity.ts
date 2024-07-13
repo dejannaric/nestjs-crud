@@ -10,15 +10,16 @@ export enum StatusType {
 
 @Entity()
 export class Task extends GeneralFields {
-  @Column()
-  title: string;
+  @Column({nullable: true})
+  title?: string;
 
-  @Column()
-  description: string;
+  @Column({nullable: true})
+  description?: string;
 
   @Column({
     type: "enum",
     enum: StatusType,
+    nullable: false
   })
   status: StatusType;
 

@@ -1,24 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import {InjectRepository} from "@nestjs/typeorm";
-import {User} from "./entities/user.entity";
-import {Repository} from "typeorm";
-import {PageService} from "../pagination/PageService";
-import {RequestPaginationFilter} from "../pagination/RequestPaginationFilter";
-import {UsersFilter} from "./users.controller";
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { Not, Repository } from 'typeorm';
+import { PageService } from '../pagination/PageService';
+import { RequestPaginationFilter } from '../pagination/RequestPaginationFilter';
+import { UsersFilter } from './users.controller';
 
 @Injectable()
 export class UsersService extends PageService {
   constructor(
-    @InjectRepository(User) private readonly userRepo: Repository<User>
+    @InjectRepository(User) private readonly userRepo: Repository<User>,
   ) {
     super();
   }
 
   async create(createUserDto: CreateUserDto) {
     return await this.userRepo.insert({
-      ...createUserDto
+      ...createUserDto,
     });
   }
 
@@ -35,17 +35,20 @@ export class UsersService extends PageService {
   async findOne(id: number) {
     return await this.userRepo.findOne({
       where: {
-        id: id
+        id: id,
       },
-      relations: ['tasks']
-    })
+      relations: ['tasks'],
+    });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    return await this.userRepo.update({
-      id: id
-    },
-      updateUserDto)
+    await this.validateUniqueUsernameOnUpdate(id, updateUserDto.username);
+    return await this.userRepo.update(
+      {
+        id: id,
+      },
+      updateUserDto,
+    );
   }
 
   async remove(id: number) {
@@ -60,5 +63,20 @@ export class UsersService extends PageService {
     }
 
     return where;
+  }
+
+  private async validateUniqueUsernameOnUpdate(id: number, username: string) {
+    const usernameExist = await this.userRepo.exists({
+      where: {
+        username: username,
+        id: Not(id),
+      },
+    });
+    if (usernameExist) {
+      throw new HttpException(
+        'Username already exists!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

@@ -1,9 +1,18 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, Query, UsePipes, ValidationPipe} from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import {StatusType} from "./entities/task.entity";
-import {RequestPaginationFilter} from "../pagination/RequestPaginationFilter";
+import { StatusType } from './entities/task.entity';
+import { RequestPaginationFilter } from '../pagination/RequestPaginationFilter';
 
 export interface TasksFilter {
   title: string;

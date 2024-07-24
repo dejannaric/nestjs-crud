@@ -1,6 +1,13 @@
-import {StatusType} from "../entities/task.entity";
-import {IsEnum, IsNotEmpty, IsOptional, IsString, MaxLength, Validate} from "class-validator";
-import {IsValidUser} from "../validators/user.exists.validator";
+import { StatusType } from '../entities/task.entity';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MaxLength,
+  Validate,
+} from 'class-validator';
+import { IsValidUser } from '../validators/user.exists.validator';
 
 export class CreateTaskDto {
   @IsOptional()
@@ -19,5 +26,5 @@ export class CreateTaskDto {
 
   @IsNotEmpty()
   @Validate(IsValidUser)
-  user!: number
+  user!: number;
 }

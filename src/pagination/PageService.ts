@@ -1,5 +1,5 @@
-import {RequestPaginationFilter, SortOrder} from "./RequestPaginationFilter";
-import {FindOptionsWhere, Repository} from "typeorm";
+import { RequestPaginationFilter, SortOrder } from './RequestPaginationFilter';
+import { FindOptionsWhere, Repository } from 'typeorm';
 
 export class PageService {
   protected createOrderQuery(filter: RequestPaginationFilter) {
@@ -21,14 +21,15 @@ export class PageService {
   ) {
     const [objects, total] = await repository.findAndCount({
       order: this.createOrderQuery(filter),
-      skip: ((filter.page != undefined ? filter.page : 1) - 1) * (filter.pageSize != undefined ? filter.pageSize : 3),
-      take: (filter.pageSize != undefined ? filter.pageSize : 3),
+      skip:
+        ((filter.page != undefined ? filter.page : 1) - 1) *
+        (filter.pageSize != undefined ? filter.pageSize : 3),
+      take: filter.pageSize != undefined ? filter.pageSize : 3,
       where: where,
     });
     return {
       objects,
-      total: total
-    }
+      total: total,
+    };
   }
-
 }

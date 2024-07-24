@@ -1,4 +1,4 @@
-import {IsEnum, IsNumber, IsOptional, Max, Min} from "class-validator";
+import { IsEnum, IsNumber, IsOptional, Max, Min } from 'class-validator';
 
 export enum SortOrder {
   ASC = 'ASC',
